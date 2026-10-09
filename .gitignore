@@ -1,0 +1,3 @@
+# Nothing is built inside the repository; WORK defaults to ~/android-cross-builds.
+*.tar.gz
+*.part

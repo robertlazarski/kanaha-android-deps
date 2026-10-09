@@ -1,0 +1,5 @@
+Kanaha Android Deps
+Copyright 2026 Robert Lazarski
+
+The files in patches/ modify Apache APR and the Apache HTTP Server,
+which are licensed under the Apache License, Version 2.0.

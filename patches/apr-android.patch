@@ -1,0 +1,24 @@
+--- a/include/arch/unix/apr_arch_proc_mutex.h
++++ b/include/arch/unix/apr_arch_proc_mutex.h
+@@ -83,7 +83,7 @@
+ /* bit values for flags field in apr_unix_lock_methods_t */
+ #define APR_PROCESS_LOCK_MECH_IS_GLOBAL          1
+ 
+-#if !APR_HAVE_UNION_SEMUN && defined(APR_HAS_SYSVSEM_SERIALIZE)
++#if !APR_HAVE_UNION_SEMUN && defined(APR_HAS_SYSVSEM_SERIALIZE) && !defined(__ANDROID__)
+ union semun {
+     int val;
+     struct semid_ds *buf;
+--- a/misc/unix/errorcodes.c
++++ b/misc/unix/errorcodes.c
+@@ -352,8 +352,8 @@
+ }
+ #endif
+ 
+-#if defined(HAVE_STRERROR_R) && defined(STRERROR_R_RC_INT) && !defined(BEOS)
+-/* AIX and Tru64 style */
++#if defined(HAVE_STRERROR_R) && (defined(STRERROR_R_RC_INT) || defined(__ANDROID__)) && !defined(BEOS)
++/* AIX, Tru64, and Android style (XSI-compliant, returns int) */
+ static char *native_strerror(apr_status_t statcode, char *buf,
+                              apr_size_t bufsize)
+ {
