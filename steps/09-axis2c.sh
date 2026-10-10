@@ -5,7 +5,7 @@
 set -euo pipefail
 . "$(dirname "$0")/../lib.sh"
 
-SRC=$WORK/axis2c-src-${AXIS2C_REF:0:9}
+SRC=${WORK:?}/axis2c-src-${AXIS2C_REF:0:9}
 H=$WORK/httpd-$HTTPD_VERSION
 [ -f "$H/include/httpd.h" ] || die "run steps/08-httpd.sh first"
 
@@ -13,7 +13,7 @@ if git -C "$AXIS2C_REPO" cat-file -e "$AXIS2C_REF^{commit}" 2>/dev/null; then
     GIT_DIR_ARGS=(-C "$AXIS2C_REPO")
 else
     log "Fetching Axis2/C $AXIS2C_REF"
-    rm -rf "$WORK/axis2c.git"
+    rm -rf "${WORK:?}/axis2c.git"
     git clone --bare --filter=blob:none "$AXIS2C_GIT" "$WORK/axis2c.git"
     GIT_DIR_ARGS=(--git-dir="$WORK/axis2c.git")
 fi
