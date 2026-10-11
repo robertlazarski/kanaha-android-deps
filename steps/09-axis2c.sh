@@ -23,7 +23,7 @@ cd "$SRC"
 
 log "Axis2/C ${AXIS2C_REF:0:9}"
 ./autogen.sh
-CFLAGS="-fPIC -I$DEPS/include -I$DEPS/include/apr-1 -I$H/include -I$DEPS/include/json-c" \
+CFLAGS="-fPIC $MAP_FLAGS -I$DEPS/include -I$DEPS/include/apr-1 -I$H/include -I$DEPS/include/json-c" \
 CPPFLAGS="-I$DEPS/include -I$DEPS/include/apr-1 -I$H/include -I$DEPS/include/json-c" \
 LDFLAGS="-L$DEPS/lib" \
 LIBS="-lapr-1 -laprutil-1 -lexpat -lssl -lcrypto -lnghttp2 -ljson-c -llog" \
@@ -53,3 +53,4 @@ cp include/*.h util/include/*.h axiom/include/*.h guththila/include/*.h \
    neethi/include/*.h "$INC/"
 cp util/include/platforms/unix/*.h "$INC/platforms/unix/"
 require_arm64 "$DEPS/lib/libaxis2_engine.a" "$DEPS/lib/libmod_axis2.a" "$DEPS/lib/libaxutil.a"
+require_no_build_paths "$DEPS/lib/libaxis2_engine.a" "$DEPS/lib/libmod_axis2.a" "$DEPS/lib/libaxutil.a"

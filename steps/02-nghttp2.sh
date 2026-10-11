@@ -8,8 +8,10 @@ unpack "nghttp2-$NGHTTP2_VERSION.tar.gz" "nghttp2-$NGHTTP2_VERSION"
 cd "$WORK/nghttp2-$NGHTTP2_VERSION"
 
 log "nghttp2 $NGHTTP2_VERSION"
+CFLAGS="-g -O2 $MAP_FLAGS" CXXFLAGS="-g -O2 $MAP_FLAGS" \
 ./configure --host=$TARGET --prefix="$DEPS" --disable-shared --enable-static \
     --disable-python-bindings --disable-examples --disable-app --enable-lib-only
 make -j"$JOBS"
 make install
 require_arm64 "$DEPS/lib/libnghttp2.a"
+require_no_build_paths "$DEPS/lib/libnghttp2.a"

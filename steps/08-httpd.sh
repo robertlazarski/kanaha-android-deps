@@ -11,7 +11,7 @@ H=$WORK/httpd-$HTTPD_VERSION
 cd "$H"
 
 log "httpd $HTTPD_VERSION"
-CFLAGS="-fPIC -I$DEPS/include -I$DEPS/include/apr-1" \
+CFLAGS="-fPIC $MAP_FLAGS -I$DEPS/include -I$DEPS/include/apr-1" \
 CPPFLAGS="-I$DEPS/include -I$DEPS/include/apr-1" \
 LDFLAGS="-L$DEPS/lib" \
 LIBS="-llog" \
@@ -77,3 +77,5 @@ require_arm64 \
 for o in modules.o buildmark.o; do
     file "$o" | grep -q "ARM aarch64" || die "$o is not arm64"
 done
+require_no_build_paths server/.libs/libmain.a modules/ssl/.libs/libmod_ssl.a \
+    modules/http2/.libs/libmod_http2.a modules.o buildmark.o

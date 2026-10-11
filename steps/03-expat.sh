@@ -9,9 +9,10 @@ unpack "expat-$EXPAT_VERSION.tar.gz" "expat-$EXPAT_VERSION"
 cd "$WORK/expat-$EXPAT_VERSION"
 
 log "expat $EXPAT_VERSION"
-CFLAGS=-fPIC ./configure --host=$TARGET --prefix="$DEPS" \
+CFLAGS="-fPIC $MAP_FLAGS" ./configure --host=$TARGET --prefix="$DEPS" \
     --disable-shared --enable-static --with-pic \
     --without-xmlwf --without-examples --without-tests --without-docbook
 make -j"$JOBS"
 make install
 require_arm64 "$DEPS/lib/libexpat.a"
+require_no_build_paths "$DEPS/lib/libexpat.a"

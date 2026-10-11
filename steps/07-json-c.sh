@@ -14,8 +14,10 @@ cmake \
     -DANDROID_ABI=arm64-v8a \
     -DANDROID_PLATFORM=android-"$API" \
     -DCMAKE_INSTALL_PREFIX="$DEPS" \
+    -DCMAKE_C_FLAGS="$MAP_FLAGS" \
     -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON -DBUILD_APPS=OFF \
     ..
 make -j"$JOBS"
 make install
 require_arm64 "$DEPS/lib/libjson-c.a"
+require_no_build_paths "$DEPS/lib/libjson-c.a"

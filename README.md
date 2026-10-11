@@ -103,6 +103,16 @@ likely to catch you out are:
   service from a deployment directory. Each app's link step registers its
   service in Axis2/C's static service registry instead.
 
+**Build paths stay out of the libraries.** The steps compile with
+`-ffile-prefix-map`, so `__FILE__` in log messages reads relative to `WORK`.
+OpenSSL is the exception: it already uses relative paths, and it embeds its
+compiler flags, so the flag would itself put `WORK` back in.
+Directories a library would look in at run time, such as OpenSSL's
+`OPENSSLDIR` and APR-util's DSO directory, point at `/kanaha-android-deps`,
+which cannot exist on a device. Each step fails if an archive it built still
+contains `WORK`. The apps' own build scripts map their source paths the same
+way.
+
 ## License
 
 Apache License 2.0; see [LICENSE](LICENSE). The libraries these scripts

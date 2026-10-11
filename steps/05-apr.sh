@@ -13,7 +13,7 @@ log "APR $APR_VERSION"
 # configure cannot run test programs when cross-compiling, so these answers
 # are supplied. They are the values the shipped builds were configured with;
 # APR only tests the iovec size against zero.
-CFLAGS=-fPIC ./configure --host=$TARGET --prefix="$DEPS" \
+CFLAGS="-fPIC $MAP_FLAGS" ./configure --host=$TARGET --prefix="$DEPS" \
     --disable-shared --enable-static --with-pic \
     ac_cv_file__dev_zero=no \
     ac_cv_func_setpgrp_void=yes \
@@ -24,3 +24,4 @@ CFLAGS=-fPIC ./configure --host=$TARGET --prefix="$DEPS" \
 make -j"$JOBS"
 make install
 require_arm64 "$DEPS/lib/libapr-1.a"
+require_no_build_paths "$DEPS/lib/libapr-1.a"

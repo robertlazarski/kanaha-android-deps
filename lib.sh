@@ -28,6 +28,14 @@ RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 STRIP=$TOOLCHAIN/bin/llvm-strip
 export CC CXX AR RANLIB STRIP
 
+# Compile-time paths end up in the apps' binaries: __FILE__ in log and assert
+# messages, and directories a library looks in at run time. Keep the builder's
+# home directory out of both. MAP_FLAGS makes source paths relative to WORK;
+# NEUTRAL_PREFIX stands in for run-time directories. It cannot exist on a
+# device, as the old build paths could not, so nothing is ever found there.
+MAP_FLAGS="-ffile-prefix-map=$WORK/="
+NEUTRAL_PREFIX=/kanaha-android-deps
+
 log() { printf '\n=== %s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
 
@@ -58,6 +66,18 @@ require_arm64() {
     for f in "$@"; do
         [ -f "$f" ] || die "missing $f"
         "$AR" p "$f" | file - | grep -q "ARM aarch64" || die "$f is not arm64"
+    done
+}
+
+# require_no_build_paths FILE...: fail if a file still names WORK. No grep -q:
+# it exits at the first match, strings dies of SIGPIPE, and under pipefail the
+# pipeline then reads as no match.
+require_no_build_paths() {
+    local f
+    for f in "$@"; do
+        if strings -a "$f" | grep -F "$WORK" >/dev/null; then
+            die "$f embeds a path under $WORK"
+        fi
     done
 }
 
